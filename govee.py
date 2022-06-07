@@ -1,5 +1,6 @@
 # Govee API
 # https://govee-public.s3.amazonaws.com/developer-docs/GoveeDeveloperAPIReference.pdf
+# API v1.7
 
 from dotenv import load_dotenv
 import json
@@ -17,6 +18,18 @@ API = {
 
 }
 
+class Govee:
+    """Govee API client"""
+
+    def __init__(
+        self,
+        api_key: str,
+    ) -> None:
+        self._api_key = api_key
+        self._devices = {}
+        
+        pass
+
 def get_devices() -> list:
     resp = requests.get(API['get_devices'], headers={"Govee-API-Key": API['api_key']})
     resp.raise_for_status()
@@ -26,7 +39,7 @@ def get_avail_controls(device: dict):
     print(device['supportCmds'])
 
 
-def power_device(device, cmd):
+def power_device(device, cmd = "off"):
     headers = {
         "Govee-API-Key": API['api_key'],
         "Content-Type": "application/json",
@@ -44,11 +57,14 @@ def power_device(device, cmd):
 
 
 def main():
+    # Get my devices
     devices = get_devices()
+    light_stick = devices[0]
 
-    power_device(devices[-1], "on")
-    time.sleep(5)
-    power_device(devices[-1], "off")
+    # Perform actions on devices
+    power_device(light_stick, "on")
+    time.sleep(5) # Wait 5 seconds
+    power_device(light_stick, "off")
     
 
 
