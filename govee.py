@@ -8,6 +8,7 @@ import os
 import requests
 import time
 
+# Load API key from .env file
 load_dotenv()
 API_URL = "https://developer-api.govee.com"
 API = {
@@ -19,7 +20,8 @@ API = {
 }
 
 class Govee:
-    """Govee API client"""
+    """Govee Device class
+    WIP. Not currently using this yet."""
 
     def __init__(
         self,
