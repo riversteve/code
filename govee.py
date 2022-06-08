@@ -105,6 +105,25 @@ def set_temperature(device: dict, temperature: int) -> None:
     resp = requests.put(API['put_device_control'], headers=headers, json=params)
     pass
 
+def set_brightness(device: dict, brightness: int) -> None:
+    headers = {
+        "Govee-API-Key": API['api_key'],
+        "Content-Type": "application/json",
+    }
+    params = {
+        'device'    : device['device'],
+        'model'     : device['model'],
+        'cmd'       : {
+            'name': 'brightness',
+            'value': brightness
+        }
+    }
+    if brightness < 0 or brightness > 100:
+        print("Invalid input. Brightness must be between 0-100")
+        pass
+    resp = requests.put(API['put_device_control'], headers=headers, json=params)
+    pass
+
 def get_device_state(device) -> list:
     headers = {
         "Govee-API-Key": API['api_key'],
@@ -127,6 +146,7 @@ def menu_print() -> None:
     print("5. Power OFF")
     print("6. Set color")
     print("7. Set color temperature")
+    print("8. Set brightness")
     print("0. Exit")
 
 def choose_colors() -> int:
@@ -139,13 +159,14 @@ def choose_colors() -> int:
         return 0, 0, 0
     return red, green, blue
 
-def choose_temperature() -> int:
+def choose_number(min: int, max: int) -> int:
     try:
-        temp =    int(input("Temperature (2000 - 9000) > "))
+        choice =    int(input("Choose ({}-{}) > ".format(min, max)))
     except:
         print("Must be integers")
-        return 2000
-    return temp
+        return min
+    return choice
+
 
 def main():
     # Get my devices
@@ -177,8 +198,11 @@ def main():
                 r, g, b = choose_colors()
                 set_color(light_stick, r, g, b)
             case '7':
-                temp = choose_temperature()
+                temp = choose_number(2000, 9000)
                 set_temperature(light_stick, temp)
+            case '8':
+                brightness = choose_number(0, 100)
+                set_brightness(light_stick, brightness)
             case other:
                 print("Invalid choice")
             
