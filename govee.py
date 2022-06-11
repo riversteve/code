@@ -149,7 +149,7 @@ def menu_print() -> None:
     print("8. Set brightness")
     print("0. Exit")
 
-def choose_colors() -> int:
+def choose_colors() -> tuple[int, int, int]:
     try:
         red =    int(input("Red     > "))
         green =  int(input("Green   > "))
