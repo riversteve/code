@@ -99,9 +99,6 @@ def set_temperature(device: dict, temperature: int) -> None:
             'value': temperature
         }
     }
-    if temperature < 2000 or temperature > 9000:
-        print("Invalid input. Color temperature must be between 2000-9000")
-        pass
     resp = requests.put(API['put_device_control'], headers=headers, json=params)
     pass
 
@@ -118,9 +115,6 @@ def set_brightness(device: dict, brightness: int) -> None:
             'value': brightness
         }
     }
-    if brightness < 0 or brightness > 100:
-        print("Invalid input. Brightness must be between 0-100")
-        pass
     resp = requests.put(API['put_device_control'], headers=headers, json=params)
     pass
 
@@ -137,18 +131,6 @@ def get_device_state(device) -> list:
     resp.raise_for_status()
     return resp.json()['data']['properties']
 
-def menu_print() -> None:
-    print("\n~ Govee API Controller ~")
-    print("1. Get devices")
-    print("2. Get device state")
-    print("3. Show device state")
-    print("4. Power ON")
-    print("5. Power OFF")
-    print("6. Set color")
-    print("7. Set color temperature")
-    print("8. Set brightness")
-    print("0. Exit")
-
 def choose_colors() -> tuple[int, int, int]:
     try:
         red =    int(input("Red     > "))
@@ -161,12 +143,26 @@ def choose_colors() -> tuple[int, int, int]:
 
 def choose_number(min: int, max: int) -> int:
     try:
-        choice =    int(input("Choose ({}-{}) > ".format(min, max)))
+        choice =    int(input("Choose a number ({}-{}) > ".format(min, max)))
+        if choice < min or choice > max:
+                print("Invalid input. Minimum={}. Maximum={}".format(min, max))
+                return min
     except:
         print("Must be integers")
         return min
     return choice
 
+def menu_print() -> None:
+    print("\n~ Govee API Controller ~")
+    print("1. Get devices")
+    print("2. Get device state")
+    print("3. Show device state")
+    print("4. Power ON")
+    print("5. Power OFF")
+    print("6. Set color")
+    print("7. Set color temperature")
+    print("8. Set brightness")
+    print("0. Exit")
 
 def main():
     # Get my devices
